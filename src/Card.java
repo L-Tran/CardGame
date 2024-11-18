@@ -1,4 +1,6 @@
 public class Card {
+
+    // Instance Varibles
     String rank;
     String suit;
     int value;
