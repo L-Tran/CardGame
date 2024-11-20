@@ -2,29 +2,29 @@ import java.util.ArrayList;
 
 public class Deck {
 
-    // Instance Varibles
+    // Instance variables
     ArrayList<Card> cards;
     int cardsLeft;
 
     // Constructor
     public Deck(String[] ranks, String[] suits, int[] values) {
+        // Add cards
         for (String s: suits) {
             for (int i = 0; i < ranks.length; i++) {
                 cards.add(new Card(s, ranks[i], values[i]));
             }
         }
 
+        // Initialize cardsLeft
         cardsLeft = cards.size();
 
-        // cards.shuffle();
+        shuffle();
     }
 
-    // IsEmpty Fuction
+    // IsEmpty Function
     public boolean isEmpty() {
-        if (cardsLeft == 0) {
-            return true;
-        }
-        return false;
+        // Check cardsLeft
+        return cardsLeft == 0;
     }
 
     // Getter for cardsLeft
@@ -33,19 +33,20 @@ public class Deck {
     }
 
     public Card deal() {
-        // If deck is empty
+        // Check if deck is empty
         if (isEmpty()) {
             return null;
         }
         // Decrease cards and return last card
-        cardsLeft--
+        cardsLeft--;
         return cards.get(cardsLeft);
     }
 
     // Shuffle cards
     public void shuffle() {
-        for (int i = cardsLeft - 1; i > 0, i--) {
-            int r = (int)(Math.random() * (i + 1);
+        for (int i = cardsLeft - 1; i > 0; i--) {
+            // Find random card & swap cards
+            int r = (int)(Math.random() * (i + 1));
             cards.add(r, cards.remove(i));
             cards.remove(cards.remove(r + 1));
         }
