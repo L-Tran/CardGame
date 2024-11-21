@@ -9,6 +9,7 @@ public class Deck {
     // Constructor
     public Deck(String[] ranks, String[] suits, int[] values) {
         // Add cards
+        cards = new ArrayList<Card>();
         for (String s: suits) {
             for (int i = 0; i < ranks.length; i++) {
                 cards.add(new Card(s, ranks[i], values[i]));
@@ -48,7 +49,7 @@ public class Deck {
             // Find random card & swap cards
             int r = (int)(Math.random() * (i + 1));
             cards.add(r, cards.remove(i));
-            cards.remove(cards.remove(r + 1));
+            cards.add(i, cards.remove(r + 1));
         }
 
     }
