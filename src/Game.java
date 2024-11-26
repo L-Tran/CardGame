@@ -12,14 +12,11 @@ public class Game {
     public Game() {
 
         // Initialize Deck & Shuffle
-        String[] ranks = {"A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10","J", "Q", "K"};
+        String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10","J", "Q", "K"};
         String[] suits = {"Hearts", "Clubs", "Spades", "Diamonds"};
-        int[] values = {14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        int[] values = {14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         this.deck = new Deck(ranks, suits, values);
         this.deck.shuffle();
-
-        // Print Instructions
-        printInstructions();
 
         // Initialize Players
         Scanner S = new Scanner(System.in);
@@ -40,21 +37,16 @@ public class Game {
         // Game has not been one
         hasWon = false;
 
+        // Print Instructions
+        printInstructions();
+
         // Play Game
         while (!hasWon) {
-            // Find winner of round
-            Player winner = compareCard(p1, p2);
-            Player loser;
-            if (winner == p1) {
-                loser = p2;
-            }
-            else {
-                loser = p1;
-            }
-            // Print the winner and cards
-            printWinner(winner, loser);
-            // Check if Game is won
+            // Play a single round
+            playRound(p1, p2);
+            // Check for a win condition after the round
             hasWon = checkWin(p1, p2);
+
         }
     }
 
@@ -77,39 +69,87 @@ public class Game {
                 """);
     }
 
+    // Play each round
+    public Player playRound(Player p1, Player p2) {
+        // Each player draws from the top card from their hand
+        Card p1Card = p1.getHand().remove(0);
+        Card p2Card = p2.getHand().remove(0);
 
-    // Compare cards
-    public Player compareCard(Player p1, Player p2) {
-        if (p1.getHand().get(0).getValue() > p2.getHand().get(0).getValue()) {
+        // Compare the cards
+        if (p1Card.getValue() > p2Card.getValue()) {
+            System.out.println(p1.getName() + " wins the round because placed " + p1Card.getRank() + " and " +
+                    p2.getName() + " placed " + p2Card.getRank());
+            p1.getHand().add(p1Card);
+            p1.getHand().add(p2Card);
             return p1;
         }
-        return p2;
-    }
-
-    // Print winner of round and adjust cards
-    public void printWinner(Player winner, Player loser) {
-        System.out.println(winner.getName() +  " won" +
-                " the round because they had a " + winner.getHand().get(0).getRank() + " and " + loser.getName() +
-                " had a " + loser.getHand().get(0).getRank());
-        winner.getHand().add(winner.getHand().size() - 1, winner.getHand().remove(0));
-        winner.getHand().add(winner.getHand().size() - 1, loser.getHand().remove(0));
+        else if (p2Card.getValue() > p1Card.getValue()) {
+            System.out.println(p2.getName() + " wins the round because they placed " + p2Card.getRank() + " and " +
+                    p1.getName() + " placed " + p1Card.getRank());
+            p2.getHand().add(p2Card);
+            p2.getHand().add(p1Card);
+            return p2;
+        }
+        // If they are equal
+        else {
+            System.out.println("\nBoth Players placed " + p1Card.getRank());
+            System.out.println("*** WAR DECLARED! ***\n");
+            return war(p1,p2);
+        }
     }
 
     // War
+    public Player war(Player p1, Player p2) {
+        ArrayList<Card> warPile = new ArrayList<Card>();
+        // Check if both players can participate in war if not return winner
+        if (p1.getHand().size() < 4) {
+            System.out.println(p1.getName() + " doesn't have enough cards for war. " + p2.getName() + " wins the round!");
+            for (Card c: p1.getHand()) {
+                p2.getHand().add(p1.getHand().remove(0));
+            }
+            return p2;
+        }
+        if (p2.getHand().size() < 4) {
+            System.out.println(p2.getName() + " doesn't have enough cards for war. " + p1.getName() + " wins the round!");
+            for (Card c: p2.getHand()) {
+                p1.getHand().add(p2.getHand().remove(0));
+            }
+            return p1;
+        }
+        warPile.add(p1.getHand().remove(0));
+        warPile.add(p2.getHand().remove(0));
+        // Remove 3 face-down cards for both players
+        System.out.println(p1.getName() + " places 3 cards face down.");
+        System.out.println(p2.getName() + " places 3 cards face down.");
+
+        // Add 3 cards face down to the war pile for both players
+        for (int i = 0; i < 3; i++) {
+            warPile.add(p1.getHand().remove(0));  // Player 1's face-down cards
+            warPile.add(p2.getHand().remove(0));  // Player 2's face-down cards
+        }
+        // Compare the face-up cards
+        Player winner = playRound(p1, p2);
+        // The winner takes all the cards in the war pile
+        for (Card c : warPile) {
+            winner.getHand().add(c);
+        }
+        // Spacing
+        System.out.println();
+        return winner;
+    }
 
     // Check for Win
     public boolean checkWin(Player p1, Player p2) {
-        if (p1.getHand().isEmpty()|| p2.getHand().isEmpty()) {
-            if (p1.getHand().size() > p2.getHand().size()) {
-                    System.out.println("\n" + p1.getName() + " wins with all the cards");
-                    return true;
-                }
-                System.out.println("\n" + p2.getName() + " wins with all the cards");
-                return true;
-            }
+        if (p1.getHand().isEmpty()) {
+            System.out.println("\n" + p2.getName() + " wins with all the cards");
+            return true;
+        }
+        if (p2.getHand().isEmpty()) {
+            System.out.println("\n" + p1.getName() + " wins with all the cards");
+            return true;
+        }
         return false;
     }
-
 
     // Main
     public static void main(String[] args) {
