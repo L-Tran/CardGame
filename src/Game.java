@@ -98,15 +98,15 @@ public class Game {
         else {
             System.out.println("\nBoth Players placed " + p1Card.getRank());
             System.out.println("*** WAR DECLARED! ***\n");
-            return war(p1,p2);
+            return war(p1, p2, p1Card, p2Card);
         }
     }
 
     // War
-    public Player war(Player p1, Player p2) {
+    public Player war(Player p1, Player p2, Card card1, Card card2) {
         ArrayList<Card> warPile = new ArrayList<Card>();
-        warPile.add(p1.getHand().remove(0));
-        warPile.add(p2.getHand().remove(0));
+        warPile.add(card1);
+        warPile.add(card2);
         // Check if both players can participate in war if not return winner of round
         if (p1.getHand().size() < 4) {
             System.out.println(p2.getName() + " wins the round because " + p1.getName() + " doesn't have enough cards for war ");
