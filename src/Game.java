@@ -109,7 +109,8 @@ public class Game {
         warPile.add(card2);
         // Check if both players can participate in war if not return winner of round
         if (p1.getHand().size() < 4) {
-            System.out.println(p2.getName() + " wins the round because " + p1.getName() + " doesn't have enough cards for war ");
+            System.out.println(p2.getName() + " wins the round because " + p1.getName() + " doesn't have enough " +
+                    "cards for war ");
             // Add cards to round winner
             for (Card c : warPile) {
                 p2.getHand().add(c);
