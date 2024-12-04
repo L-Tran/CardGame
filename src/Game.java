@@ -4,10 +4,10 @@ import java.util.Scanner;
 public class Game {
 
     // Instance variables
-    Deck deck;
-    Player p1;
-    Player p2;
-    boolean hasWon;
+    private Deck deck;
+    private Player p1;
+    private Player p2;
+    private boolean hasWon;
 
     // Constructor
     public Game() {
@@ -28,8 +28,7 @@ public class Game {
         ArrayList<Card> hand1 = new ArrayList<Card>();
         ArrayList<Card> hand2 = new ArrayList<Card>();
         // Give each player half of a deck
-        int n = deck.getCardsLeft() / 2;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < deck.getCardsLeft() / 2; i++) {
             hand1.add(deck.deal());
             hand2.add(deck.deal());
         }
@@ -46,9 +45,9 @@ public class Game {
         printInstructions();
         while (!hasWon) {
             // Play a single round
-            playRound(p1, p2);
+            playRound();
             // Check for a win condition after the round
-            hasWon = checkWin(p1, p2);
+            hasWon = checkWin();
 
         }
     }
@@ -73,7 +72,7 @@ public class Game {
     }
 
     // Play each round
-    public Player playRound(Player p1, Player p2) {
+    public Player playRound() {
         // Each player draws from the top card from their hand
         Card p1Card = p1.getHand().remove(0);
         Card p2Card = p2.getHand().remove(0);
@@ -98,12 +97,13 @@ public class Game {
         else {
             System.out.println("\nBoth Players placed " + p1Card.getRank());
             System.out.println("*** WAR DECLARED! ***\n");
-            return war(p1, p2, p1Card, p2Card);
+            return war(p1Card, p2Card);
         }
     }
 
     // War
-    public Player war(Player p1, Player p2, Card card1, Card card2) {
+    public Player war(Card card1, Card card2) {
+        // Make a pile to hold the cards
         ArrayList<Card> warPile = new ArrayList<Card>();
         warPile.add(card1);
         warPile.add(card2);
@@ -132,7 +132,7 @@ public class Game {
             warPile.add(p2.getHand().remove(0));  // Player 2's face-down cards
         }
         // Compare the face-up cards
-        Player winner = playRound(p1, p2);
+        Player winner = playRound();
         // The winner takes all the cards in the war pile
         for (Card c : warPile) {
             winner.getHand().add(c);
@@ -143,7 +143,7 @@ public class Game {
     }
 
     // Check for Win
-    public boolean checkWin(Player p1, Player p2) {
+    public boolean checkWin() {
         // If hand is empty then player loses & Game is over
         if (p1.getHand().isEmpty()) {
             System.out.println("\n" + p2.getName() + " wins with all the cards");
