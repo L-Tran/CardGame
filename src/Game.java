@@ -1,3 +1,4 @@
+// War by Logan Tran
 import java.util.ArrayList;
 import java.util.Scanner;
 
