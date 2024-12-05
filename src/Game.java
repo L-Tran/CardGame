@@ -29,7 +29,7 @@ public class Game {
         ArrayList<Card> hand1 = new ArrayList<Card>();
         ArrayList<Card> hand2 = new ArrayList<Card>();
         // Give each player half of a deck
-        for (int i = 0; i < deck.getCardsLeft() / 2; i++) {
+        while (deck.getCardsLeft() > 0) {
             hand1.add(deck.deal());
             hand2.add(deck.deal());
         }
@@ -49,7 +49,6 @@ public class Game {
             playRound();
             // Check for a win condition after the round
             hasWon = checkWin();
-
         }
     }
 
