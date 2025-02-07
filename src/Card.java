@@ -37,7 +37,7 @@ public class Card {
         return value;
     }
 
-    // ToString
+    // ToString method
     @Override
     public String toString() {
         return this.rank + " of " + this.suit;

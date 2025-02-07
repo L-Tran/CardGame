@@ -35,6 +35,7 @@ public class Player {
         this.hand.add(c);
     }
 
+    // ToString method
     @Override
     public String toString() {
         return this.name + " has " + this.points + " points " + this.name + "'s cards: " + this.hand;

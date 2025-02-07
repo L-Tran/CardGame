@@ -5,13 +5,18 @@ import java.util.Scanner;
 public class Game {
 
     // Instance variables
+    public GameViewer window;
     private Deck deck;
     private Player p1;
     private Player p2;
     private boolean hasWon;
+    public int gameStage;
 
     // Constructor
     public Game() {
+
+        this.window = new GameViewer(this);
+        gameStage = 1;
 
         // Initialize Deck & Shuffle
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10","J", "Q", "K"};
@@ -20,12 +25,12 @@ public class Game {
         this.deck = new Deck(ranks, suits, values);
         this.deck.shuffle();
         // Initialize Players
-        Scanner S = new Scanner(System.in);
+        Scanner s = new Scanner(System.in);
         // Ask for names
         System.out.println("Enter P1: ");
-        String name1 = S.nextLine();
+        String name1 = s.nextLine();
         System.out.println("Enter P2: ");
-        String name2 = S.nextLine();
+        String name2 = s.nextLine();
         ArrayList<Card> hand1 = new ArrayList<Card>();
         ArrayList<Card> hand2 = new ArrayList<Card>();
         // Give each player half of a deck
@@ -44,11 +49,17 @@ public class Game {
         hasWon = false;
         // Print Instructions
         printInstructions();
-        while (!hasWon) {
-            // Play a single round
-            playRound();
-            // Check for a win condition after the round
-            hasWon = checkWin();
+        Scanner s = new Scanner(System.in);
+        System.out.println("Press Enter to Start");
+        String enter = s.nextLine();
+        if (enter == null) {
+            gameStage = 2;
+            while (!hasWon) {
+                // Play a single round
+                playRound();
+                // Check for a win condition after the round
+                hasWon = checkWin();
+            }
         }
     }
 
@@ -146,10 +157,12 @@ public class Game {
     public boolean checkWin() {
         // If hand is empty then player loses & Game is over
         if (p1.getHand().isEmpty()) {
+            gameStage = 3;
             System.out.println("\n" + p2.getName() + " wins with all the cards");
             return true;
         }
         if (p2.getHand().isEmpty()) {
+            gameStage = 3;
             System.out.println("\n" + p1.getName() + " wins with all the cards");
             return true;
         }
