@@ -1,15 +1,19 @@
+import java.awt.*;
+
 public class Card {
 
     // Instance variables
-    String rank;
-    String suit;
-    int value;
+    private String rank;
+    private String suit;
+    private int value;
+    private Image cardImage;
 
     // Constructor
-    public Card(String suit, String rank, int value) {
+    public Card(String suit, String rank, int value, Image cardImage) {
         this.suit = suit;
         this.rank = rank;
         this.value = value;
+        this.cardImage = cardImage;
     }
 
     // Getter & setter methods

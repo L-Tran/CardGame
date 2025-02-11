@@ -5,18 +5,18 @@ import java.util.Scanner;
 public class Game {
 
     // Instance variables
-    public GameViewer window;
+    private GameViewer window;
     private Deck deck;
     private Player p1;
     private Player p2;
     private boolean hasWon;
-    public int gameStage;
+    private int state;
 
     // Constructor
     public Game() {
 
         this.window = new GameViewer(this);
-        gameStage = 1;
+        state = 1;
 
         // Initialize Deck & Shuffle
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10","J", "Q", "K"};
@@ -43,6 +43,12 @@ public class Game {
         p2 = new Player(name2, hand2);
     }
 
+    public Player getP1() {return p1;}
+
+    public Player getP2() {return p2;}
+
+    public int getState() {return this.state;}
+
     // Play Game
     public void playGame() {
         // Game has not been one
@@ -52,8 +58,9 @@ public class Game {
         Scanner s = new Scanner(System.in);
         System.out.println("Press Enter to Start");
         String enter = s.nextLine();
-        if (enter == null) {
-            gameStage = 2;
+        if (enter == "") {
+            state = 2;
+            window.repaint();
             while (!hasWon) {
                 // Play a single round
                 playRound();
@@ -80,6 +87,7 @@ public class Game {
                 The Score
                 The game ends when one player has won all the cards.
                 """);
+                window.repaint();
     }
 
     // Play each round
@@ -157,12 +165,12 @@ public class Game {
     public boolean checkWin() {
         // If hand is empty then player loses & Game is over
         if (p1.getHand().isEmpty()) {
-            gameStage = 3;
+            state = 3;
             System.out.println("\n" + p2.getName() + " wins with all the cards");
             return true;
         }
         if (p2.getHand().isEmpty()) {
-            gameStage = 3;
+            state = 3;
             System.out.println("\n" + p1.getName() + " wins with all the cards");
             return true;
         }

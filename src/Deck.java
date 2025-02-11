@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Deck {
@@ -10,9 +12,10 @@ public class Deck {
     public Deck(String[] ranks, String[] suits, int[] values) {
         // Add cards
         cards = new ArrayList<Card>();
-        for (String s: suits) {
-            for (int i = 0; i < ranks.length; i++) {
-                cards.add(new Card(s, ranks[i], values[i]));
+        for (int i = 0; i < ranks.length; i++) {
+            for (int j = 0; j < suits.length; j++) {
+                Image cardImage = new ImageIcon("Resources/" + Integer.toString((i + 1) * (j + 1)) + ".png").getImage();
+                cards.add(new Card(suits[j], ranks[i], values[i], cardImage));
             }
         }
 
