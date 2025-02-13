@@ -9,6 +9,9 @@ public class GameViewer extends JFrame {
     public static final int WINDOW_HEIGHT = 1000;
     public final int TITLE_BAR_HEIGHT = 23;
     private Game game;
+    private Image backCard;
+    public static final int CARD_WIDTH = 116;
+    public static final int CARD_HEIGHT = 180;
 
     public GameViewer(Game game) {
         this.game = game;
@@ -19,14 +22,16 @@ public class GameViewer extends JFrame {
         this.setVisible(true);
         createBufferStrategy(2);
 
+        backCard = new ImageIcon("Resources/back.png").getImage();
+
 
 
     }
 
     public void paint(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         if (game.getState() == 1) {
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
             g.setColor(Color.black);
             Font stringFont = new Font( "PLAIN", Font.BOLD, 15 );
             g.setFont(stringFont);
@@ -37,8 +42,17 @@ public class GameViewer extends JFrame {
             Color background = new Color(52,90,55);
             g.setColor(background);
             g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+            g.drawImage(backCard, 442, 800, CARD_WIDTH, CARD_HEIGHT, this);
+            g.drawImage(backCard, 442, 50, CARD_WIDTH, CARD_HEIGHT,this);
+            game.getP1().getHand().get(0).draw(g, 384);
+            game.getP2().getHand().get(0).draw(g, 500);
+
+
         }
-        else if (game.getState() == 3){
+        else if(game.getState() == 3) {
+
+        }
+        else if (game.getState() == 4){
 
         }
     }

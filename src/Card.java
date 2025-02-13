@@ -7,13 +7,15 @@ public class Card {
     private String suit;
     private int value;
     private Image cardImage;
+    private GameViewer window;
 
     // Constructor
-    public Card(String suit, String rank, int value, Image cardImage) {
+    public Card(String suit, String rank, int value, Image cardImage, GameViewer window) {
         this.suit = suit;
         this.rank = rank;
         this.value = value;
         this.cardImage = cardImage;
+        this.window = window;
     }
 
     // Getter & setter methods
@@ -45,5 +47,9 @@ public class Card {
     @Override
     public String toString() {
         return this.rank + " of " + this.suit;
+    }
+
+    public void draw(Graphics g, int x) {
+        g.drawImage(cardImage, x,410, window.CARD_WIDTH, window.CARD_HEIGHT, window);
     }
 }

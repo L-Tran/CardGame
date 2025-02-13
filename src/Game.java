@@ -22,7 +22,7 @@ public class Game {
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10","J", "Q", "K"};
         String[] suits = {"Hearts", "Clubs", "Spades", "Diamonds"};
         int[] values = {14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
-        this.deck = new Deck(ranks, suits, values);
+        this.deck = new Deck(ranks, suits, values, window);
         this.deck.shuffle();
         // Initialize Players
         Scanner s = new Scanner(System.in);
@@ -58,11 +58,12 @@ public class Game {
         Scanner s = new Scanner(System.in);
         System.out.println("Press Enter to Start");
         String enter = s.nextLine();
-        if (enter == "") {
+        if (enter.equals("")) {
             state = 2;
             window.repaint();
             while (!hasWon) {
                 // Play a single round
+                window.repaint();
                 playRound();
                 // Check for a win condition after the round
                 hasWon = checkWin();
