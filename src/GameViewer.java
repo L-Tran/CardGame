@@ -50,7 +50,12 @@ public class GameViewer extends JFrame {
 
         }
         else if(game.getState() == 3) {
-
+            g.drawImage(backCard, 616, 410, CARD_WIDTH, CARD_HEIGHT, this);
+            g.drawImage(backCard, 732, 410, CARD_WIDTH, CARD_HEIGHT, this);
+            g.drawImage(backCard, 848, 410, CARD_WIDTH, CARD_HEIGHT, this);
+            g.drawImage(backCard, 268, 410, CARD_WIDTH, CARD_HEIGHT,this);
+            g.drawImage(backCard, 152, 410, CARD_WIDTH, CARD_HEIGHT,this);
+            g.drawImage(backCard, 36, 410, CARD_WIDTH, CARD_HEIGHT,this);
         }
         else if (game.getState() == 4){
 

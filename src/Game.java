@@ -1,8 +1,11 @@
 // War by Logan Tran
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Game {
+public class Game implements ActionListener {
 
     // Instance variables
     private GameViewer window;
@@ -11,6 +14,7 @@ public class Game {
     private Player p2;
     private boolean hasWon;
     private int state;
+    private static final int SLEEP_TIME = 500;
 
     // Constructor
     public Game() {
@@ -20,7 +24,7 @@ public class Game {
 
         // Initialize Deck & Shuffle
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10","J", "Q", "K"};
-        String[] suits = {"Hearts", "Clubs", "Spades", "Diamonds"};
+        String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
         int[] values = {14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         this.deck = new Deck(ranks, suits, values, window);
         this.deck.shuffle();
@@ -41,6 +45,9 @@ public class Game {
         // Initialize players with new info
         p1 = new Player(name1, hand1);
         p2 = new Player(name2, hand2);
+
+        Timer clock = new Timer(SLEEP_TIME, this);
+        clock.start();
     }
 
     public Player getP1() {return p1;}
@@ -48,6 +55,20 @@ public class Game {
     public Player getP2() {return p2;}
 
     public int getState() {return this.state;}
+
+    public void actionPerformed(ActionEvent e) {
+        if (state == 2) {
+            // Play a single round
+            playRound();
+            window.repaint();
+            // Check for a win condition after the round
+            hasWon = checkWin();
+        }
+        else if (state == 3) {
+            window.repaint();
+            state = 2;
+        }
+    }
 
     // Play Game
     public void playGame() {
@@ -61,13 +82,6 @@ public class Game {
         if (enter.equals("")) {
             state = 2;
             window.repaint();
-            while (!hasWon) {
-                // Play a single round
-                window.repaint();
-                playRound();
-                // Check for a win condition after the round
-                hasWon = checkWin();
-            }
         }
     }
 
@@ -102,6 +116,7 @@ public class Game {
         }
         // If they are equal then war is declared
         else {
+            state = 3;
             System.out.println("\nBoth Players placed " + p1.getHand().get(0).getRank());
             System.out.println("*** WAR DECLARED! ***\n");
             return war(p1.getHand().remove(0), p2.getHand().remove(0));
@@ -166,12 +181,12 @@ public class Game {
     public boolean checkWin() {
         // If hand is empty then player loses & Game is over
         if (p1.getHand().isEmpty()) {
-            state = 3;
+            state = 4;
             System.out.println("\n" + p2.getName() + " wins with all the cards");
             return true;
         }
         if (p2.getHand().isEmpty()) {
-            state = 3;
+            state = 4;
             System.out.println("\n" + p1.getName() + " wins with all the cards");
             return true;
         }
@@ -183,5 +198,6 @@ public class Game {
         // Start the game
         Game game = new Game();
         game.playGame();
+
     }
 }
