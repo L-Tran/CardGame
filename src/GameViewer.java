@@ -1,3 +1,4 @@
+// GameViewer class
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,7 +10,11 @@ public class GameViewer extends JFrame {
     public static final int WINDOW_HEIGHT = 1000;
     public static final int CARD_WIDTH = 116;
     public static final int CARD_HEIGHT = 180;
-    public final int TITLE_BAR_HEIGHT = 23;
+    public static final int TITLE_BAR_HEIGHT = 23;
+    public static final Color BACKGROUND = new Color(52,90,55);
+    public static final Font STRING_FONT = new Font( "PLAIN", Font.BOLD, 15 );
+    public static final Font WIN_FONT = new Font( "PLAIN", Font.BOLD, 35 );
+
 
     // Instance Varibles
     private Game game;
@@ -36,45 +41,28 @@ public class GameViewer extends JFrame {
         // Paint screen depending on game state
         // Instructions
         if (game.getState() == 1) {
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+            clearScreen(g,Color.white);
             g.setColor(Color.black);
-            Font stringFont = new Font( "PLAIN", Font.BOLD, 15 );
-            g.setFont(stringFont);
+            g.setFont(STRING_FONT);
             paintPlayers(g);
             paintInstructions(g);
         }
         // In game
         else if (game.getState() == 2){
             // Change background color
-            Color background = new Color(52,90,55);
-            g.setColor(background);
-            g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+            clearScreen(g, BACKGROUND);
             // Draw hands
-            g.drawImage(backCard, 442, 800, CARD_WIDTH, CARD_HEIGHT, this);
-            g.drawImage(backCard, 442, 50, CARD_WIDTH, CARD_HEIGHT,this);
+            paintCardBacks(g);
             // Draw round card
-            game.getP1().getHand().get(0).draw(g, 384);
-            game.getP2().getHand().get(0).draw(g, 500);
+            paintPlayerCards(g);
             // Write # of cards
-            g.setColor(Color.white);
-            g.drawString(game.getP1().getName() + ": " + game.getP1().getHand().size(), 475, 45);
-            g.drawString(game.getP2().getName() + ": " + game.getP2().getHand().size(), 475, 995);
+            paintScores(g);
             // Draw arrow for who is winning
-            if (game.getRoundWinner() != null) {
-                if (game.getRoundWinner().equals(game.getP1())) {
-                    g.drawImage(arrow, 375, 90, 75, 60, this);
-                }
-                else if (game.getRoundWinner().equals(game.getP2())) {
-                    g.drawImage(arrow, 375, 840, 75, 60, this);
-
-                }
-            }
+            paintRoundWinnerArrow(g);
         }
         // War
         else if(game.getState() == 3) {
-            Color background = new Color(52,90,55);
-            g.setColor(background);
+            // Draw war cards
             int[] xPositions = {616, 732, 848, 268, 152, 36};
             for (int x : xPositions) {
                 g.drawImage(backCard, x, 410, CARD_WIDTH, CARD_HEIGHT, this);
@@ -82,16 +70,14 @@ public class GameViewer extends JFrame {
         }
         // Win screen
         else if (game.getState() == 4){
-            g.setColor(Color.white);
-            g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+            clearScreen(g, Color.white);
             g.setColor(Color.black);
-            Font stringFont = new Font( "PLAIN", Font.BOLD, 35 );
-            g.setFont(stringFont);
+            g.setFont(WIN_FONT);
             g.drawString(game.getRoundWinner().getName() + " wins with all the cards!!!",250 ,450);
         }
     }
 
-    private void clearScreen(Graphics g, Color color) {
+    public void clearScreen(Graphics g, Color color) {
         g.setColor(color);
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
@@ -118,6 +104,37 @@ public class GameViewer extends JFrame {
         instructions.add("  The game ends when one player has won all the cards.");
         for (int i = 0; i < instructions.size(); i++) {
             g.drawString(instructions.get(i), 100, 200 + 50 * i);
+        }
+    }
+
+    // Paint "hands"
+    public void paintCardBacks(Graphics g) {
+        g.drawImage(backCard, 442, 800, CARD_WIDTH, CARD_HEIGHT, this);
+        g.drawImage(backCard, 442, 50, CARD_WIDTH, CARD_HEIGHT,this);
+    }
+
+    // Paint cards for round
+    public void paintPlayerCards(Graphics g) {
+        game.getP1().getHand().get(0).draw(g, 384);
+        game.getP2().getHand().get(0).draw(g, 500);
+    }
+
+    // Paint # of cards
+    public void paintScores(Graphics g) {
+        g.setColor(Color.white);
+        g.drawString(game.getP1().getName() + ": " + game.getP1().getHand().size(), 475, 45);
+        g.drawString(game.getP2().getName() + ": " + game.getP2().getHand().size(), 475, 995);
+    }
+
+    // Paint arrow to round winner
+    public void paintRoundWinnerArrow(Graphics g) {
+        if (game.getRoundWinner() != null) {
+            if (game.getRoundWinner().equals(game.getP1())) {
+                g.drawImage(arrow, 375, 90, 75, 60, this);
+            } else if (game.getRoundWinner().equals(game.getP2())) {
+                g.drawImage(arrow, 375, 840, 75, 60, this);
+
+            }
         }
     }
 }
