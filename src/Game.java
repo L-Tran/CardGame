@@ -12,6 +12,7 @@ public class Game implements ActionListener {
     private Deck deck;
     private Player p1;
     private Player p2;
+    private Player roundWinner;
     private boolean hasWon;
     private int state;
     private static final int SLEEP_TIME = 500;
@@ -50,11 +51,14 @@ public class Game implements ActionListener {
         clock.start();
     }
 
+    // Getters
     public Player getP1() {return p1;}
 
     public Player getP2() {return p2;}
 
     public int getState() {return this.state;}
+
+    public Player getRoundWinner() {return roundWinner;}
 
     public void actionPerformed(ActionEvent e) {
         if (state == 2) {
@@ -123,6 +127,7 @@ public class Game implements ActionListener {
         }
     }
 
+    // Round winner function
     public Player roundWinner(Player winner, Player loser) {
         // Each player draws from the top card from their hand
         Card winnerCard = winner.getHand().remove(0);
@@ -132,6 +137,7 @@ public class Game implements ActionListener {
         // Add cards to round winner
         winner.getHand().add(winnerCard);
         winner.getHand().add(loserCard);
+        roundWinner = winner;
         return winner;
     }
 
@@ -183,11 +189,13 @@ public class Game implements ActionListener {
         if (p1.getHand().isEmpty()) {
             state = 4;
             System.out.println("\n" + p2.getName() + " wins with all the cards");
+            state = 4;
             return true;
         }
         if (p2.getHand().isEmpty()) {
             state = 4;
             System.out.println("\n" + p1.getName() + " wins with all the cards");
+            state = 4;
             return true;
         }
         return false;

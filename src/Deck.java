@@ -10,7 +10,7 @@ public class Deck {
 
     // Constructor
     public Deck(String[] ranks, String[] suits, int[] values, GameViewer window) {
-        // Add cards
+        // Add cards & Images
         cards = new ArrayList<Card>();
         int counter = 1;
         for (int i = 0; i < ranks.length; i++) {
@@ -58,6 +58,4 @@ public class Deck {
         }
 
     }
-
-
 }
